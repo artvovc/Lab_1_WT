@@ -1,7 +1,11 @@
 "use strict"
 
 var UIController                   = {}
-var userAnswersAccumulator         = {}
+var currentItemState               = {}
+var userAnswersAccumulator         = {
+										quizCount: 0,
+    									answers: []
+									 }
 const requiredUIElementForQuestion = "question"
 const requiredUIElementForQuiz     = "quiz"
 const requiredUIElementForAnswers  = "answer"
@@ -24,7 +28,7 @@ function populate() {
 
 function reloadContent() {
 	//it should update all required elements with next content
-	if (data != null && data.length != 0) 
+	if (data != null && data.length != 0)
 	    loadContentWithFollowData(data.shift())
 	else 
 		clearRequiredUIElementsAndStopTheGame()
@@ -51,7 +55,7 @@ function loadContentWithFollowData(data) {
 		    newRadio.checked = false
 
 		    let newLable = document.createElement("label")
-		    newLable.setAttribute("id", radioIdentificator + ":label")
+		    newLable.setAttribute("id", radioIdentificator + labelSuffix)
 		    newLable.setAttribute("for", radioIdentificator)
 		    newLable.textContent = it.answer
 
@@ -60,25 +64,49 @@ function loadContentWithFollowData(data) {
 
             UIController[requiredUIElementForQuiz].appendChild(newDiv)
             UIController[radioIdentificator] = document.getElementById(radioIdentificator)
-            UIController[radioIdentificator + ":label"] = document.getElementById(radioIdentificator + ":label")
+            UIController[radioIdentificator + labelSuffix] = document.getElementById(radioIdentificator + labelSuffix)
             UIController[radioIdentificator + divSuffix] = document.getElementById(radioIdentificator + divSuffix)
         } else {
         	UIController[radioIdentificator].checked = false
         	UIController[radioIdentificator].value = it.answer
-            UIController[radioIdentificator + ":label"].textContent = it.answer
+            UIController[radioIdentificator + labelSuffix].textContent = it.answer
         }
 
 	})
 
+    userAnswersAccumulator.quizCount += 1
+	//set current state
+    currentItemState = data
+
+}
+
+function setUserAnswer() {
+
+	function rec(iter) {
+		if (data == UIController[requiredUIElementForQuiz].childNodes.length) return
+		if (UIController[requiredUIElementForQuiz].children[iter].children[0].checked) {
+            userAnswersAccumulator.answers.push({
+                correctIs: currentItemState.correctIs,
+                userAnswerIs: UIController[requiredUIElementForQuiz].children[iter].children[0].value
+            })
+			return
+		}
+		rec(++iter)
+	}
+
+	rec(0)
+
+	if (data.length != 0)
+		loadContentWithFollowData(data.shift())
+	else
+		clearRequiredUIElementsAndStopTheGame()
+
 }
 
 function clearRequiredUIElementsAndStopTheGame() {
-    //TODO needed to remove all children from body tag
-	loadContentWithFollowData({question: "", cases:[{answer:""},{answer:""},{answer:""},{answer:""}]})
+	//hide elements
+    UIController[requiredUIElementForQuestion].style.display = "none"
+    UIController[requiredUIElementForQuiz].style.display = "none"
 
-	//flush variables
-	data                   = null
-	UIController           = null
-	userAnswersAccumulator = null
-
+	//show score
 }
