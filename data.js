@@ -1,4 +1,6 @@
-var data = 
+"use strinct"
+
+var data =
 [
   {
 	question: "alio mei dai vopros",

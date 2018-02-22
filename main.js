@@ -5,6 +5,8 @@ var userAnswersAccumulator         = {}
 const requiredUIElementForQuestion = "question"
 const requiredUIElementForQuiz     = "quiz"
 const requiredUIElementForAnswers  = "answer"
+const labelSuffix                  = ":label"
+const divSuffix                    = ":div"
 
 
 function load() { 
@@ -39,7 +41,7 @@ function loadContentWithFollowData(data) {
         if(document.getElementById(radioIdentificator) == null) {
 
         	let newDiv = document.createElement("div")
-        	newDiv.setAttribute("id", radioIdentificator + ":div")
+        	newDiv.setAttribute("id", radioIdentificator + divSuffix)
 
         	let newRadio = document.createElement("input")
 		    newRadio.setAttribute("id", radioIdentificator)
@@ -59,7 +61,7 @@ function loadContentWithFollowData(data) {
             UIController[requiredUIElementForQuiz].appendChild(newDiv)
             UIController[radioIdentificator] = document.getElementById(radioIdentificator)
             UIController[radioIdentificator + ":label"] = document.getElementById(radioIdentificator + ":label")
-            UIController[radioIdentificator + ":div"] = document.getElementById(radioIdentificator + ":div")
+            UIController[radioIdentificator + divSuffix] = document.getElementById(radioIdentificator + divSuffix)
         } else {
         	UIController[radioIdentificator].checked = false
         	UIController[radioIdentificator].value = it.answer
