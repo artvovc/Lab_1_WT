@@ -1,22 +1,26 @@
 "use strict"
 
-var UIController                   = {}
-var currentItemState               = {}
-var userAnswersAccumulator         = {
-										quizCount: 0,
-    									answers: []
-									 }
-const requiredUIElementForQuestion = "question"
-const requiredUIElementForQuiz     = "quiz"
-const requiredUIElementForAnswers  = "answer"
-const labelSuffix                  = ":label"
-const divSuffix                    = ":div"
+var UIController                    = {}
+var currentItemState                = {}
+var userAnswersAccumulator          = {
+										 quizCount: 0,
+    								 	 answers: []
+									  }
+const requiredUIElementForQuestion  = "question"
+const requiredUIElementForQuiz      = "quiz"
+const requiredUIElementForAnswers   = "answer"
+const requiredUIElementForAnswerBtn = "answerBtn"
+const requiredUIElementForNextBtn   = "nextBtn"
+const labelSuffix                   = ":label"
+const divSuffix                     = ":div"
 
 
 function load() { 
     //populate UIController with required document elements for future processing
-	UIController[requiredUIElementForQuestion] = document.getElementById("question")
-	UIController[requiredUIElementForQuiz]     = document.getElementById("quiz")
+	UIController[requiredUIElementForQuestion]  = document.getElementById("question")
+	UIController[requiredUIElementForQuiz]      = document.getElementById("quiz")
+	UIController[requiredUIElementForAnswerBtn] = document.getElementById("answerBtn")
+	UIController[requiredUIElementForNextBtn]   = document.getElementById("nextBtn")
 
 	//initiate content
     populate()
@@ -66,10 +70,13 @@ function loadContentWithFollowData(data) {
             UIController[radioIdentificator] = document.getElementById(radioIdentificator)
             UIController[radioIdentificator + labelSuffix] = document.getElementById(radioIdentificator + labelSuffix)
             UIController[radioIdentificator + divSuffix] = document.getElementById(radioIdentificator + divSuffix)
+        
         } else {
+        
         	UIController[radioIdentificator].checked = false
         	UIController[radioIdentificator].value = it.answer
             UIController[radioIdentificator + labelSuffix].textContent = it.answer
+        
         }
 
 	})
@@ -105,8 +112,9 @@ function setUserAnswer() {
 
 function clearRequiredUIElementsAndStopTheGame() {
 	//hide elements
-    UIController[requiredUIElementForQuestion].style.display = "none"
-    UIController[requiredUIElementForQuiz].style.display = "none"
-
-	//show score
+    UIController[requiredUIElementForQuestion].style.display  = "none"
+    UIController[requiredUIElementForQuiz].style.display      = "none"
+    UIController[requiredUIElementForAnswerBtn].style.display = "none"
+    UIController[requiredUIElementForNextBtn].style.display   = "none"
+    
 }

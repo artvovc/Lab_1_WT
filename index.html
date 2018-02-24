@@ -2,14 +2,14 @@
 <html>
 <head>
 	<title>lab1wtQuizTest</title>
-    <script type="text/javascript" src="data.js"></script>
-    <script type="text/javascript" src="main.js"></script>
+    <script async type="text/javascript" src="data.js"></script>
+    <script async type="text/javascript" src="main.js" onload="load()"></script>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
-<body onload="load()">
+<body>
     <div id="question"></div>
     <div id="quiz"></div>
-    <button onclick="reloadContent()">Click fucking button</button>
-    <button onclick="setUserAnswer()">Answer</button>
+    <button id="nextBtn" onclick="reloadContent()">Next</button>
+    <button id="answerBtn" onclick="setUserAnswer()">Answer</button>
 </body>
 </html>
