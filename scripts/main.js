@@ -1,19 +1,24 @@
 "use strict"
 
-var UIController                    = {}
-var currentItemState                = {}
-var userAnswersAccumulator          = {
-										 quizCount: 0,
-    								 	 answers: []
-									  }
 const requiredUIElementForQuestion  = "question"
 const requiredUIElementForQuiz      = "quiz"
 const requiredUIElementForAnswers   = "answer"
 const requiredUIElementForAnswerBtn = "answerBtn"
 const requiredUIElementForNextBtn   = "nextBtn"
+
 const labelSuffix                   = ":label"
 const divSuffix                     = ":div"
 
+var UIController                    = {}
+var currentItemState                = {}
+var userAnswersAccumulator          = {
+										 quizCount: 0,
+    								 	 answers: [],
+    								 	 calculate: function() {
+    								 	 	console.log(this.quizCount)
+    								 	 	console.log("this shit works")
+    								 	 }
+									  }
 
 function load() { 
     //populate UIController with required document elements for future processing
@@ -23,11 +28,7 @@ function load() {
 	UIController[requiredUIElementForNextBtn]   = document.getElementById("nextBtn")
 
 	//initiate content
-    populate()
-}
-
-function populate() {
-	reloadContent()
+    reloadContent()
 }
 
 function reloadContent() {
@@ -103,11 +104,8 @@ function setUserAnswer() {
 
 	rec(0)
 
-	if (data.length != 0)
-		loadContentWithFollowData(data.shift())
-	else
-		clearRequiredUIElementsAndStopTheGame()
-
+    reloadContent()
+    
 }
 
 function clearRequiredUIElementsAndStopTheGame() {
@@ -116,5 +114,8 @@ function clearRequiredUIElementsAndStopTheGame() {
     UIController[requiredUIElementForQuiz].style.display      = "none"
     UIController[requiredUIElementForAnswerBtn].style.display = "none"
     UIController[requiredUIElementForNextBtn].style.display   = "none"
+
+    //show result
+    userAnswersAccumulator.calculate()
     
 }
