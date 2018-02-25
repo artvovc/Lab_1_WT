@@ -3,6 +3,7 @@
 const requiredUIElementForQuestion  = "question"
 const requiredUIElementForQuiz      = "quiz"
 const requiredUIElementForAnswers   = "answer"
+const requiredUIElementForResult    = "result"
 const requiredUIElementForAnswerBtn = "answerBtn"
 const requiredUIElementForNextBtn   = "nextBtn"
 
@@ -15,31 +16,49 @@ var userAnswersAccumulator          = {
 										 quizCount: 0,
     								 	 answers: [],
     								 	 calculate: function() {
-    								 	 	console.log(this.quizCount)
-    								 	 	console.log("this shit works")
+
+    								 	 	return this.answers.filter(it => it.correctIs == it.userAnswerIs).length + "/" + this.quizCount
+
     								 	 }
 									  }
 
+var chron
+
+function initTimeout() { 
+	setTimeout(function(){ reloadContent() }, 20000)
+}
+
 function load() { 
+
     //populate UIController with required document elements for future processing
 	UIController[requiredUIElementForQuestion]  = document.getElementById("question")
 	UIController[requiredUIElementForQuiz]      = document.getElementById("quiz")
+	UIController[requiredUIElementForResult]    = document.getElementById("result")
 	UIController[requiredUIElementForAnswerBtn] = document.getElementById("answerBtn")
 	UIController[requiredUIElementForNextBtn]   = document.getElementById("nextBtn")
 
 	//initiate content
     reloadContent()
+
 }
 
 function reloadContent() {
+
 	//it should update all required elements with next content
-	if (data != null && data.length != 0)
+	if (data != null && data.length != 0) {
 	    loadContentWithFollowData(data.shift())
+	    if (chron != undefined)
+	        clearTimeout(chron)
+        else 
+        	chron = initTimeout()
+	}
 	else 
 		clearRequiredUIElementsAndStopTheGame()
+
 }
 
 function loadContentWithFollowData(data) {
+
 	//it should overlap current data into required UI elements
 	UIController[requiredUIElementForQuestion].textContent = data.question
 
@@ -91,6 +110,7 @@ function loadContentWithFollowData(data) {
 function setUserAnswer() {
 
 	function rec(iter) {
+
 		if (data == UIController[requiredUIElementForQuiz].childNodes.length) return
 		if (UIController[requiredUIElementForQuiz].children[iter].children[0].checked) {
             userAnswersAccumulator.answers.push({
@@ -100,6 +120,7 @@ function setUserAnswer() {
 			return
 		}
 		rec(++iter)
+
 	}
 
 	rec(0)
@@ -109,6 +130,7 @@ function setUserAnswer() {
 }
 
 function clearRequiredUIElementsAndStopTheGame() {
+
 	//hide elements
     UIController[requiredUIElementForQuestion].style.display  = "none"
     UIController[requiredUIElementForQuiz].style.display      = "none"
@@ -116,6 +138,6 @@ function clearRequiredUIElementsAndStopTheGame() {
     UIController[requiredUIElementForNextBtn].style.display   = "none"
 
     //show result
-    userAnswersAccumulator.calculate()
+    UIController[requiredUIElementForResult].textContent      = "Your score: " + userAnswersAccumulator.calculate()
     
 }
