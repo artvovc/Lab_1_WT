@@ -111,7 +111,7 @@ function setUserAnswer() {
 
 	function rec(iter) {
 
-		if (data == UIController[requiredUIElementForQuiz].childNodes.length) return
+		if (iter == UIController[requiredUIElementForQuiz].childNodes.length) return
 		if (UIController[requiredUIElementForQuiz].children[iter].children[0].checked) {
             userAnswersAccumulator.answers.push({
                 correctIs: currentItemState.correctIs,
